@@ -11,9 +11,10 @@ import java.net.URL;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import Member.LoginVO;
+import Member.MemberVO;
 import global.StdDimention;
 import order.OrderService;
 import order.OrderServiceImpl;
@@ -27,13 +28,12 @@ public class CategoryUI extends JFrame implements ActionListener{
 	JButton btnHan,btnJoong,btnIl,btnChi,btnPi,btnBo;
 	JPanel panelNorth, panelCenter,panelSouth;
 	ImageIcon icon;
-	LoginVO lo = new LoginVO();
+	MemberVO lo = new MemberVO();
 	CategoryVO vo = new CategoryVO();
 	OrderVO order = new OrderVO();
 	
 	OrderService orderService = OrderServiceImpl.getInstance();
-	public CategoryUI(int orderSeq) {
-		order.setOrderSeq(orderSeq);
+	public CategoryUI() {
 		init();
 	}
 	public void init(){
@@ -79,17 +79,33 @@ public class CategoryUI extends JFrame implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		switch (e.getActionCommand()) {
-		case "한식": order.setCatId("hansik");break;
-		case "중식":order.setCatId("hansik");break;
-		case "일식":order.setCatId("hansik");break;
-		case "치킨":order.setCatId("hansik");break;
-		case "피자":order.setCatId("hansik");break;
-		case "보쌈,족발":order.setCatId("hansik");break;
+		case "한식": OrderVO.CAT_ID ="hansik";break;
+		case "중식":
+			JOptionPane.showMessageDialog(this,"한식으로 일괄 선택됩니다.양해바랍니다.");
+			OrderVO.CAT_ID ="hansik";
+			break;
+		case "일식":
+			JOptionPane.showMessageDialog(this,"한식으로 일괄 선택됩니다.양해바랍니다.");
+			OrderVO.CAT_ID ="hansik";
+			break;
+		case "치킨":
+			JOptionPane.showMessageDialog(this,"한식으로 일괄 선택됩니다.양해바랍니다.");
+			OrderVO.CAT_ID ="hansik";
+			break;
+		case "피자":
+			JOptionPane.showMessageDialog(this,"한식으로 일괄 선택됩니다.양해바랍니다.");
+			OrderVO.CAT_ID ="hansik";
+			break;
+		case "보쌈,족발":
+			JOptionPane.showMessageDialog(this,"한식으로 일괄 선택됩니다.양해바랍니다.");
+			OrderVO.CAT_ID ="hansik";
+			break;
 		default: break;
 		}
 		this.dispose();
 		this.repaint();
-		StoreUI ui = new StoreUI(order.getOrderSeq());
+		 
+		StoreUI ui = new StoreUI();
 		
 	}
 

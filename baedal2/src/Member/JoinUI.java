@@ -23,7 +23,7 @@ import javax.swing.border.LineBorder;
 
 
 public class  JoinUI extends JFrame implements ActionListener, ItemListener{
-	LoginService service = LoginServiceImpl.getInstance();
+	MemberService service = MemberServiceImpl.getInstance();
 	private static final long serialVersionUID = 1L;
 
 	JFrame jform=new JFrame();

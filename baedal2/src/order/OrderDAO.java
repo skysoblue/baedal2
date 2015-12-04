@@ -44,7 +44,7 @@ public class OrderDAO extends DAO{
 			}
 	}
 	public int add(String userid){
-		String sql = "INSERT INTO ORDERS(ORDER_SEQ,USERID)VALUES( NEXT VALUE FOR SEQ, ?)";
+		String sql = "INSERT INTO ORDERS(SEQ,USERID)VALUES( NEXT VALUE FOR SEQ, ?)";
 		int result = 0;
 		try {
 			pstmt = connection.prepareStatement(sql);
@@ -53,6 +53,7 @@ public class OrderDAO extends DAO{
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		System.out.println("ORDER ADD 결과 : "+result);
 		return result;
 	}
 	public int selectOrdersById(String userid) {

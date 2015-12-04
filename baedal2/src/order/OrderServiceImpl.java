@@ -8,14 +8,14 @@ public class OrderServiceImpl implements OrderService{
 	public static OrderService getInstance(){
 		return instance;
 	}
-	OrderDAO dao = new OrderDAO();
+	OrderDAO dao = OrderDAO.getInstance();
 	
 	public int add(String userid){
 		return dao.add(userid);
 	}
-	
-	public String searchPrices(String seq) {
-		String num = dao.searchPrices(seq);
+	@Override
+	public String searchPrices(String menuId) {
+		String num = dao.searchPrices(menuId);
 		String result = "";
 		String temp = "";
 		int j = 0;

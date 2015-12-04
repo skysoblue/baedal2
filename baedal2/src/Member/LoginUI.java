@@ -30,8 +30,8 @@ public class LoginUI extends JFrame implements ActionListener {
 	PreparedStatement pstmt;
 	Timestamp reg_date;
 
-	LoginService service = LoginServiceImpl.getInstance();
-	LoginVO member = new LoginVO();
+	MemberService service = MemberServiceImpl.getInstance();
+	MemberVO member = new MemberVO();
 	OrderVO order = new OrderVO();
 	OrderService orderService = OrderServiceImpl.getInstance();
 	private String names[] = { "아이디", "비밀번호" };
@@ -65,10 +65,10 @@ public class LoginUI extends JFrame implements ActionListener {
 					break;
 				} else {
 					JOptionPane.showMessageDialog(this, member.getName()+"님, 환영합니다.");
-					int orderSeq = orderService.add(member.getUserid());
+					OrderVO.USERID = member.getUserid();
 					this.dispose();
 					this.repaint();
-					CategoryUI ui = new CategoryUI(orderSeq);
+					CategoryUI ui = new CategoryUI();
 					break;
 				}
 			} 
@@ -86,18 +86,18 @@ public class LoginUI extends JFrame implements ActionListener {
 	}
 
 	public void idSelect() throws SQLException {
-		String UsrId = null;
+		String userid = null;
 		ResultSet rs = null;
-		int Cnt = 0;
-		UsrId = fields[0].getText();
-		String SQL1 = "SELECT * FROM MEMBER WHERE USERID='" + UsrId + "'";
+		int cnt = 0;
+		userid = fields[0].getText();
+		String SQL1 = "SELECT * FROM MEMBER WHERE USERID='" + userid + "'";
 		pstmt = con.prepareStatement(SQL1);
 		rs = pstmt.executeQuery();
 		while (rs.next()) {
-			Cnt++;
+			cnt++;
 		}
 
-		if (Cnt > 0) {
+		if (cnt > 0) {
 			JOptionPane.showMessageDialog(this, "중복된 아이디가 존재 합니다.");
 		} else {
 			JOptionPane.showMessageDialog(this, "아이디 중복검사가 완료되었습니다.\n중복된 아이디가 없습니다.");
@@ -140,7 +140,12 @@ public class LoginUI extends JFrame implements ActionListener {
 				+ "ID : kim, 비번 : 1 <br/>"
 				+ "ID : lee, 비번 : 1 <br/>"
 				+ "========================<br/>"
-				+ "하나를 선택해서 로그인 바랍니다</html>", JLabel.CENTER);
+				+ "하나를 선택해서 로그인 바랍니다.<br/>"
+				+ "회원가입역시 오라클이 연결된 상황에서만<br/>"
+				+ "가능합니다.그외에 아이디,비번 <br/>"
+				+ "찾기는 연결없이도 가능합니다.<br/>"
+				+ "아이디 비번찾기에서 생년월일은 20000101,<br/>"
+				+ "첫강아지는 '멍멍' 이라고 입력하셔야 합니다</html>", JLabel.CENTER);
 		panelSouth.add(notice);
 		add(panelNorth, "North");
 		add(panelCenter, "Center");
@@ -148,7 +153,7 @@ public class LoginUI extends JFrame implements ActionListener {
 		login.addActionListener(this);
 		join.addActionListener(this);
 		search.addActionListener(this);
-		StdDimention.setPosition(this,300,350);
+		StdDimention.setPosition(this,300,400);
 	}
 }
 

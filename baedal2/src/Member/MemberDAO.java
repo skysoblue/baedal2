@@ -11,27 +11,27 @@ import java.util.List;
 import global.Constants;
 import global.DAO;
 
-public class LoginDAO extends DAO{
-	private Connection connection;
+public class MemberDAO extends DAO{
+	private Connection conn;
 	private Statement stmt;
 	private PreparedStatement pstmt;
 	private ResultSet rs;
-	private List<LoginVO> list = new ArrayList<LoginVO>();
-	private LoginVO login = new LoginVO();
+	private List<MemberVO> list = new ArrayList<MemberVO>();
+	private MemberVO login = new MemberVO();
 	
-	private static LoginDAO instance = new LoginDAO();
-	public LoginDAO() {
+	private static MemberDAO instance = new MemberDAO();
+	public MemberDAO() {
 		try {
 			/**
 			 * 오라클 커넥션
-			 * connection = DatabaseFactory.getDatabase(Vendor.ORACLE,
+			 * conn = DatabaseFactory.getDatabase(Vendor.ORACLE,
 			 *               Constants.ORACLE_ID, 
 			 *               Constants.ORACLE_PASSWORD)
 			 *               .getConnection();
 			 */
 			// HSQL 커넥션
 			Class.forName(Constants.HSQL_DRIVER);
-			connection = DriverManager.getConnection(
+			conn = DriverManager.getConnection(
 					Constants.HSQL_URL,
 					Constants.HSQL_ID,
 					Constants.HSQL_PASSWORD);
@@ -39,15 +39,15 @@ public class LoginDAO extends DAO{
 			e.printStackTrace();
 		}
 	}
-	public static LoginDAO getInstance() {
+	public static MemberDAO getInstance() {
 		return instance;
 	}
 		//--------------- 회원가입
 		@Override
-		public int insert(LoginVO o) {
+		public int insert(MemberVO o) {
 			int result = 0;
 			try {
-				pstmt = connection.prepareStatement(o.insert());
+				pstmt = conn.prepareStatement(o.insert());
 				pstmt.setString(1, o.getUserid());
 				pstmt.setString(2, o.getPassword());
 				pstmt.setString(3, o.getName());
@@ -67,9 +67,9 @@ public class LoginDAO extends DAO{
 		 * @return 로그인객체
 		 * @param 아이디, 비번
 		 */
-		public LoginVO login(String userid, String pass) {
+		public MemberVO login(String userid, String pass) {
 			try {
-				pstmt = connection
+				pstmt = conn
 						.prepareStatement("SELECT * FROM MEMBER WHERE USERID = ? AND PASSWORD = ?");
 				pstmt.setString(1, userid);
 				pstmt.setString(2, pass);
@@ -99,14 +99,14 @@ public class LoginDAO extends DAO{
 			return login;
 		}		
 	
-		public List<LoginVO> selectAll() {
-			List<LoginVO>temp = new ArrayList<LoginVO>();
+		public List<MemberVO> selectAll() {
+			List<MemberVO>temp = new ArrayList<MemberVO>();
 			
 			try {
-				stmt = connection.createStatement();
+				stmt = conn.createStatement();
 				rs = stmt.executeQuery(login.selectAll());
 				while (rs.next()) {
-					LoginVO vo = new LoginVO();
+					MemberVO vo = new MemberVO();
 					vo.setUserid(rs.getString("USERID"));
 					vo.setPassword(rs.getString("PASSWORD"));
 					vo.setName(rs.getString("NAME"));
@@ -125,16 +125,38 @@ public class LoginDAO extends DAO{
 			return temp;
 			
 		}
-
-		public List<LoginVO> searchById(String name, String birth) {
-			List<LoginVO> list = new ArrayList<LoginVO>();
+		public MemberVO searchById(String userid) {
+			String sql = "SELECT * FROM MEMBER WHERE USERID = '"+userid+"'";
+			MemberVO member = new MemberVO();
+			try {
+				stmt = conn.createStatement();
+				rs = stmt.executeQuery(sql);
+				System.out.println("디버깅");
+				while (rs.next()) {
+					
+					member.setUserid(rs.getString("USERID"));
+					member.setPassword(rs.getString("PASSWORD"));
+					member.setName(rs.getString("NAME"));
+					member.setPhone(rs.getString("PHONE"));
+					member.setAddr(rs.getString("ADDR"));
+					member.setBirth(rs.getString("BIRTH"));
+					member.setQuestion(rs.getString("QUESTION"));
+					member.setAnswer(rs.getString("ANSWER"));
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			return member;
+		}
+		public List<MemberVO> searchById(String name, String birth) {
+			List<MemberVO> list = new ArrayList<MemberVO>();
 			
 			try {
-				stmt = connection.createStatement();
+				stmt = conn.createStatement();
 				rs = stmt.executeQuery(login.selectByID(name, birth));
 				System.out.println("디버깅");
 				while (rs.next()) {
-					LoginVO result = new LoginVO();
+					MemberVO result = new MemberVO();
 					result.setUserid(rs.getString("USERID"));
 					result.setPassword(rs.getString("PASSWORD"));
 					result.setName(rs.getString("NAME"));
@@ -154,30 +176,25 @@ public class LoginDAO extends DAO{
 			return list;
 		}
 
-		public List<LoginVO> searchByPass(String id, String que, String ans) {
-			List<LoginVO> list = new ArrayList<LoginVO>();
+		public String searchByPass(String userid, String question, String answer) {
+			System.out.println("넘어온 아이디 : "+userid);
+			System.out.println("넘어온 질문 : "+question);
+			System.out.println("넘어온 답 : "+answer);
+			String password = "";
 			try {
-				stmt = connection.createStatement();
-				rs = stmt.executeQuery(login.selectByPass(id, que, ans));
+				String sql = "SELECT PASSWORD FROM MEMBER WHERE USERID = ? AND QUESTION = ? AND ANSWER = ?";
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setString(1, userid);
+				pstmt.setString(2, question);
+				pstmt.setString(3, answer);
+				rs = pstmt.executeQuery();
 				while (rs.next()) {
-					LoginVO result = new LoginVO();
-					result.setUserid(rs.getString("USERID"));
-					result.setPassword(rs.getString("PASSWORD"));
-					result.setName(rs.getString("NAME"));
-					result.setPhone(rs.getString("PHONE"));
-					result.setAddr(rs.getString("ADDR"));
-					result.setBirth(rs.getString("BIRTH"));
-					result.setQuestion(rs.getString("QUESTION"));
-					result.setAnswer(rs.getString("ANSWER"));
-					list.add(result);
-
+					password = rs.getString("PASSWORD");
 				}
-
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-
-			return list;
+			return password;
 		}
 		@Override
 		public void selectOrderMember() {
@@ -191,9 +208,9 @@ public class LoginDAO extends DAO{
 			// 저장되어 있는 아이디 값과 내가 입력한 아이디값을 비교,
 
 			boolean exist = false;
-			LoginVO temp = new LoginVO();
+			MemberVO temp = new MemberVO();
 			try {	
-				stmt = connection.createStatement();
+				stmt = conn.createStatement();
 				rs = stmt.executeQuery(login.checkID(id));
 				
 				while (rs.next()) { 

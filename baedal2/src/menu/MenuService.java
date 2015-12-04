@@ -8,13 +8,13 @@ public interface MenuService {
 	public void getOrderMember();
 
 	// 메뉴검색..
-	public void getOrderMenu();
+	public List<MenuVO> getMenus(String storeId);
 
 	// 가격을 넘겨줘
 	public int getPrice(String menuId);
 
 	// 상품이미지를 호출
-	public List<MenuVO> getMenusBy(String storeId);
+	public String getMenuName(String storeId);
 
 	public String[] getProfileImages();
 

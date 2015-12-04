@@ -26,9 +26,9 @@ import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
 
 public class SearchUI extends JFrame implements ActionListener, Runnable, ItemListener {
-	LoginService service = LoginServiceImpl.getInstance();
-	List<LoginVO> list = new ArrayList<LoginVO>();
-	LoginVO vo = new LoginVO();
+	MemberService service = MemberServiceImpl.getInstance();
+	List<MemberVO> list = new ArrayList<MemberVO>();
+	MemberVO vo = new MemberVO();
 	Canvas canvas;
 	JButton btnIde, btnPwe;
 	BufferStrategy strategy;
@@ -88,9 +88,9 @@ public class SearchUI extends JFrame implements ActionListener, Runnable, ItemLi
 		jpId.add(txtId);
 		jpQue.add(lblQue);
 		jpQue.add(combo);
-		combo.addItem("첫 강아지");
-		combo.addItem("첫 학교");
-		combo.addItem("첫 사랑");
+		combo.addItem("첫강아지");
+		combo.addItem("첫학교");
+		combo.addItem("첫사랑");
 		combo.addItem("태어난곳");
 		combo.addItem("첫친구");
 		combo.setEditable(true);
@@ -146,7 +146,7 @@ public class SearchUI extends JFrame implements ActionListener, Runnable, ItemLi
 				JOptionPane.showMessageDialog(this, "모든 정보 입력하세요");
 			} else if (service.searchById(txtName.getText(), txtBirth.getText()) != null) {
 				list = service.searchById(txtName.getText(), txtBirth.getText());
-				for (LoginVO vo : list) {
+				for (MemberVO vo : list) {
 					JOptionPane.showMessageDialog(this, "귀하의 ID는 " + vo.getUserid() + " 입니다");
 					this.dispose();
 					this.repaint();
@@ -166,96 +166,14 @@ public class SearchUI extends JFrame implements ActionListener, Runnable, ItemLi
 				JOptionPane.showMessageDialog(this, "모든 정보 입력하세요");
 			} else if (service.searchByPass(txtId.getText(), combo.getSelectedItem().toString(),
 					txtAn.getText()) != null) {
-				list = service.searchByPass(txtId.getText(), combo.getSelectedItem().toString(), txtAn.getText());
-				for (LoginVO vo : list) {
-					JOptionPane.showMessageDialog(this, "귀하의 비밀번호는 " + vo.getPassword() + " 입니다");
+				String password = service.searchByPass(txtId.getText(), combo.getSelectedItem().toString(), txtAn.getText());
+					JOptionPane.showMessageDialog(this, "귀하의 비밀번호는 " + password + " 입니다");
 					this.dispose();
 					this.repaint();
 					LoginUI ui = new LoginUI();
 					return;
 				}
-				System.out.println(list);
 				JOptionPane.showMessageDialog(this, "해당 정보의 ID가 없습니다");
-			}
 		}
 	}
 }
-
-//
-// }
-// }
-// this.dispose(); //지금있는 화면을 날리고
-// this.repaint(); // 새화면을 띄운다.
-// JoinUI joinUI = new JoinUI();
-// break;
-// case "로그인":
-// System.out.println("UI에서 실행중 =================");
-// if (fields[0].getText().isEmpty()||fields[1].getText().isEmpty()) {
-// JOptionPane.showMessageDialog(this, "아이디 또는 비밀번호를 다시 입력해 주세요.");
-// }else if (service.login(fields[0].getText(), fields[1].getText()).equals("로그인
-// 실패")) {
-// JOptionPane.showMessageDialog(this, "로그인 실패");
-// break;
-// }else{
-//// service.login(fields[0].getText(), fields[1].getText());
-//// service.login(fields[0].getText(), fields[1].getText()).equals("로그인 성공");
-// JOptionPane.showMessageDialog(this, "환영합니다.");
-//
-// this.dispose();
-// this.repaint();
-// FisrtUI ui = new FisrtUI();
-// break;
-// }
-//
-// case "ID / PW 찾기":
-// this.dispose();
-// this.repaint();
-// SearchUI searchUI = new SearchUI();
-// break;
-//
-// default:
-// break;
-// }
-//
-// }
-//
-//
-// }
-//
-// }
-// String command = e.getActionCommand();
-// switch (command) {
-// case "중복확인":
-// if (userIdt.getText().isEmpty()) {
-// JOptionPane.showMessageDialog(this, "아이디를 입력해 주세요.");
-// }else if ((service.checkDupl(userIdt.getText()))) { // 이미 가입한 아이디랑 입력한 값이
-// 다르다면 ' 그 값을 입력하지 않아도 가입이 가능하댄다'
-// JOptionPane.showMessageDialog(this, "이미 가입한 아이디 입니다.");
-// }else {
-// JOptionPane.showMessageDialog(this, "사용 가능한 아이디 입니다.");
-// }
-// break;
-// case "회원가입":
-// String id = userIdt.getText();
-// String pass = passwordt.getText();
-// String name = namet.getText();
-// String birth = birtht.getText();
-// String addr = addrt.getText();
-// String phone = phonet.getText();
-// String que = combo.getSelectedItem().toString(); //해야댐
-// System.out.println(que);
-// String ans = answert.getText();
-// service.join(id, pass, name, phone, addr, birth, que, ans);
-// JOptionPane.showMessageDialog(this, name+" 님 가입을 축하드립니다");
-// this.dispose(); //
-// this.repaint();
-// LoginUI ui = new LoginUI();
-// break;
-// case "취소":
-// this.dispose(); //
-// this.repaint();
-// LoginUI ui2 = new LoginUI();
-// break;
-// default:
-// break;
-// }

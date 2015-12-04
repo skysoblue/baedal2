@@ -3,7 +3,6 @@ package order;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -13,9 +12,14 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
-import Member.LoginUI;
-import category.CategoryUI;
+import Member.MemberService;
+import Member.MemberServiceImpl;
+import Member.MemberVO;
 import global.StdDimention;
+import menu.MenuService;
+import menu.MenuServiceImpl;
+import store.StoreService;
+import store.StoreServiceImpl;
 
 public class OrderUI extends JFrame implements ActionListener, Runnable{
 
@@ -31,8 +35,10 @@ public class OrderUI extends JFrame implements ActionListener, Runnable{
 	JTextArea area;
 	OrderVO order = new OrderVO();
 	OrderService service = OrderServiceImpl.getInstance(); 
-	public OrderUI(int orderSeq) {
-		order.setOrderSeq(orderSeq);
+	MemberService memberService = MemberServiceImpl.getInstance();
+	MenuService menuService = MenuServiceImpl.getInstance();
+	StoreService storeService = StoreServiceImpl.getInstance();
+	public OrderUI() {
 		init();
 		//assembly();
 	}
@@ -43,11 +49,11 @@ public class OrderUI extends JFrame implements ActionListener, Runnable{
 
 	public void init(){
 		
-		String[] temp = service.searchMember(order.getUserid());
+		/*String[] temp = service.searchMember(order.getUserid());
 		for (int i = 0; i < temp.length; i++) {
 			String nasdf = temp[i];
 			System.out.println(temp[i]);
-		}
+		}*/
 		this.setTitle("주문정보확인");
 		//pullMember = new PullMember(); // 주문한 회원 정보를 끌어다오는 객체 *만들어야함
 		panelW = new JPanel(new BorderLayout());
@@ -60,16 +66,26 @@ public class OrderUI extends JFrame implements ActionListener, Runnable{
 		jp1 = new JPanel();
 		jp2 = new JPanel();
 		area = new JTextArea();
-		btnPay = new JButton("결제하기");
+		btnPay = new JButton("주문취소");
 		btnPay.setPreferredSize(new Dimension(190, 40));
-		btnPhonePay = new JButton("<html>휴대폰으로<br/> 결제하기</html>");
+		btnPhonePay = new JButton("주문완료");
 		btnPhonePay.setPreferredSize(new Dimension(190, 100));
-		btnList = new JButton("<html>2. 주문목록<br/>"
-				+service.searchMenu(Integer.toString(order.getOrderSeq()))
-				+"<br/>"+service.searchPrices(Integer.toString(order.getOrderSeq()))
-				+"원</html>" );
+		btnList = new JButton("<html><h1>주문정보</h1><br/>"
+				+"■ 식당 <br/>"
+				+storeService.getStoreName(OrderVO.STORE_ID)+"<br/>"
+				+"■ 메뉴 <br/>"
+				+menuService.getMenuName(OrderVO.MENU_ID)+"<br/>"
+				+"■ 가격 <br/>"
+				+menuService.getPrice(OrderVO.MENU_ID)+"원</html>" );
 		btnList.setPreferredSize(new Dimension(190, 290));
-		btnMember = new JButton("<html>1. 배송정보<br/>"+"아이디 : "+temp[0]+"<br/>"+"이름 : "+temp[1]+"<br/>"+"폰번호 : "+temp[2]+"<br/>"+"주소 : "+temp[3]);
+		MemberVO member = memberService.searchById(OrderVO.USERID);
+		btnMember = new JButton("<html><h1>배송정보</h1><br/>"
+				+"■ 회원 <br/>"
+				+member.getName()+"<br/>"
+				+"■ 전화번호 <br/>"
+			    +member.getPhone()+"<br/>"
+				+"■ 주소 <br/>"
+			    +member.getAddr());
 		btnMember.setPreferredSize(new Dimension(190, 390));
 		jp333333333333 = new JPanel();
 		
@@ -114,14 +130,14 @@ public class OrderUI extends JFrame implements ActionListener, Runnable{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		switch (e.getActionCommand()) {
-		case "결제하기":
+		case "주문완료":
 			this.dispose();
 			JOptionPane.showMessageDialog(this,"주문이 완료 되었습니다.");
 			System.exit(0);
 			break;
-		case "<html>휴대폰으로<br/> 결제하기</html>":
+		case "주문취소":
 			this.dispose();
-			JOptionPane.showMessageDialog(this,"주문이 완료 되었습니다.");
+			JOptionPane.showMessageDialog(this,"주문이 취소 되었습니다.");
 			System.exit(0);
 			break;
 		default:

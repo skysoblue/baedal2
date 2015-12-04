@@ -41,13 +41,15 @@ public class StoreVO implements Serializable, SQL{
 		this.catId = catId;
 	}
 
-	@Override
-	public String toString() {
-		return "StoreVO [상호명=" + storeName + "]";
-	}
+	
 
 	
 //	=================식당 검색==================
+
+	@Override
+	public String toString() {
+		return "상점들 [아이디=" + storeId + ", 상호명=" + storeName + ", 카테고리=" + catId + "]";
+	}
 
 	public String selectStore() {
 		// TODO Auto-generated method stub

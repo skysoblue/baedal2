@@ -24,6 +24,9 @@ import javax.swing.JPanel;
 import global.StdDimention;
 import order.OrderUI;
 import order.OrderVO;
+import store.StoreService;
+import store.StoreServiceImpl;
+import store.StoreVO;
 
 public class MenuUI extends JFrame implements ActionListener {
 //   public static void main(String[] args) {
@@ -40,24 +43,25 @@ public class MenuUI extends JFrame implements ActionListener {
    JMenuBar bar;
    BufferedReader in;
    List<JButton> btns;
-   private String foodName;
-   MenuService service = new MenuServiceImpl(); 
+   MenuService service = MenuServiceImpl.getInstance(); 
+   MenuVO[] menus = new MenuVO[8];
+   List<MenuVO> list = new ArrayList<MenuVO>();
+	MenuService menuService = MenuServiceImpl.getInstance();
    MenuDAO dao = new MenuDAO();
    OrderVO order = new OrderVO();
    
-   public MenuUI(int orderSeq) {
-	  order.setOrderSeq(orderSeq);
+   public MenuUI() {
       init();
    }
 
    private void init() {
       // 부품준비!
+	  list = menuService.getMenus(OrderVO.STORE_ID);
+	  menus = list.toArray(new MenuVO[list.size()]);
       this.setTitle("배달의 기수");
-      
       this.setLayout(new GridLayout(4, 1)); //4 = 4행 1열?
       btns = new ArrayList<JButton>();
       panelNorthImg = new JPanel();
-   
       panelNorthBtn = new JPanel();
       panelSouthImg = new JPanel();
       panelSouthBtn = new JPanel();
@@ -67,21 +71,21 @@ public class MenuUI extends JFrame implements ActionListener {
 	//	arr[i] = 
 	}*/
       
-      URL imageGo1 = getClass().getClassLoader().getResource("images/menu_dakbal.png");
+      URL imageGo1 = getClass().getClassLoader().getResource("images/menu_"+menus[0].getMenuId()+".png");
       ImageIcon icon1 = new ImageIcon(imageGo1);
-      URL imageGo2 = getClass().getClassLoader().getResource("images/menu_ddokbokki.png");
+      URL imageGo2 = getClass().getClassLoader().getResource("images/menu_"+menus[1].getMenuId()+".png");
       ImageIcon icon2 = new ImageIcon(imageGo2);
-      URL imageGo3 = getClass().getClassLoader().getResource("images/menu_dongas.png");
+      URL imageGo3 = getClass().getClassLoader().getResource("images/menu_"+menus[2].getMenuId()+".png");
       ImageIcon icon3 = new ImageIcon(imageGo3);
-      URL imageGo4 = getClass().getClassLoader().getResource("images/menu_karbonara.png");
+      URL imageGo4 = getClass().getClassLoader().getResource("images/menu_"+menus[3].getMenuId()+".png");
       ImageIcon icon4 = new ImageIcon(imageGo4);
-      URL imageGo5 = getClass().getClassLoader().getResource("images/menu_kimbab.png");
+      URL imageGo5 = getClass().getClassLoader().getResource("images/menu_"+menus[4].getMenuId()+".png");
       ImageIcon icon5 = new ImageIcon(imageGo5);
-      URL imageGo6 = getClass().getClassLoader().getResource("images/menu_kimchibok.png");
+      URL imageGo6 = getClass().getClassLoader().getResource("images/menu_"+menus[5].getMenuId()+".png");
       ImageIcon icon6 = new ImageIcon(imageGo6);
-      URL imageGo7 = getClass().getClassLoader().getResource("images/menu_ramen.png");
+      URL imageGo7 = getClass().getClassLoader().getResource("images/menu_"+menus[6].getMenuId()+".png");
       ImageIcon icon7 = new ImageIcon(imageGo7);
-      URL imageGo8 = getClass().getClassLoader().getResource("images/menu_soondae.png");
+      URL imageGo8 = getClass().getClassLoader().getResource("images/menu_"+menus[7].getMenuId()+".png");
       ImageIcon icon8 = new ImageIcon(imageGo8);
    
       lblImg1 = new JLabel(icon1);
@@ -147,45 +151,45 @@ public class MenuUI extends JFrame implements ActionListener {
       String menuId = "";
       JButton temp = (JButton) e.getSource();
       if (temp.equals(btnget1)) {
-         order.setMenuName("떡볶이");
+    	 OrderVO.MENU_ID = menus[0].getMenuId();
          this.dispose();
          this.repaint();
-         OrderUI ui = new OrderUI(order.getOrderSeq());
-         
-         
+         OrderUI ui = new OrderUI();
       } else if (temp.equals(btnget2)) {
-
-         order.setMenuName("까르보나라 떡볶이");
+    	 OrderVO.MENU_ID = menus[1].getMenuId();
          this.dispose();
          this.repaint();
-         OrderUI ui = new OrderUI(order.getOrderSeq());
+         OrderUI ui = new OrderUI();
       } else if (temp.equals(btnget3)) {
-
-         order.setMenuName("순대");
+    	 OrderVO.MENU_ID = menus[2].getMenuId();
          this.dispose();
          this.repaint();
-         OrderUI ui = new OrderUI(order.getOrderSeq());
+         OrderUI ui = new OrderUI();
       }else if (temp.equals(btnget4)) {
-         order.setMenuName("돈까스");
+         OrderVO.MENU_ID = menus[3].getMenuId();
          this.dispose();
          this.repaint();
-         OrderUI ui = new OrderUI(order.getOrderSeq());
+         OrderUI ui = new OrderUI();
       }else if (temp.equals(btnget5)) {
-         order.setMenuName("김치볶음밥");
+         OrderVO.MENU_ID = menus[4].getMenuId();
          this.dispose();
          this.repaint();
-         OrderUI ui = new OrderUI(order.getOrderSeq());
+         OrderUI ui = new OrderUI();
       }else if (temp.equals(btnget6)) {
-         order.setMenuName("닭발");
+         OrderVO.MENU_ID = menus[5].getMenuId();
          this.dispose();
          this.repaint();
-         OrderUI ui = new OrderUI(order.getOrderSeq());
+         OrderUI ui = new OrderUI();
       }else if (temp.equals(btnget7)) {
-        
-         JOptionPane.showMessageDialog(null, "메뉴가 없습니다.");
+    	  OrderVO.MENU_ID = menus[6].getMenuId();
+          this.dispose();
+          this.repaint();
+          OrderUI ui = new OrderUI();
       }else if (temp.equals(btnget8)) {
-        
-         JOptionPane.showMessageDialog(null, "메뉴가 없습니다.");
+    	  OrderVO.MENU_ID = menus[7].getMenuId();
+          this.dispose();
+          this.repaint();
+          OrderUI ui = new OrderUI();
       }
    } 
 }

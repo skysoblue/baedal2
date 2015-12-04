@@ -7,11 +7,20 @@ import global.SQL;
 public class MenuVO implements Serializable, SQL {
 
 	private static final long serialVersionUID = 1L;
-	private int menuId;
+	private String menuId;
 	private String menuName;
 	private String menuImg;
+	private int price;
+	
+	public int getPrice() {
+		return price;
+	}
 
-	public int getMenuId() {
+	public void setPrice(int price) {
+		this.price = price;
+	}
+
+	public String getMenuId() {
 		return menuId;
 	}
 
@@ -23,7 +32,7 @@ public class MenuVO implements Serializable, SQL {
 		return menuImg;
 	}
 
-	public void setMenuId(int menuId) {
+	public void setMenuId(String menuId) {
 		this.menuId = menuId;
 	}
 

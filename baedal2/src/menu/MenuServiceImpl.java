@@ -1,5 +1,6 @@
 package menu;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MenuServiceImpl implements MenuService{
@@ -16,9 +17,8 @@ public class MenuServiceImpl implements MenuService{
    }
 
    @Override
-   public void getOrderMenu() {
-      // TODO Auto-generated method stub
-      
+   public List<MenuVO> getMenus(String storeId) {
+	   return dao.selectMenus(storeId);
    }
 
 
@@ -28,8 +28,8 @@ public class MenuServiceImpl implements MenuService{
    }
 
 	@Override
-	public List<MenuVO> getMenusBy(String storeId) {
-		return dao.selectMenusBy(storeId);
+	public String getMenuName(String storeId) {
+		return dao.selectMenuName(storeId);
 	}
 	
 	@Override

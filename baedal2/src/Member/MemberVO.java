@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import global.SQL;
 
-public class LoginVO implements Serializable, SQL{
+public class MemberVO implements Serializable, SQL{
 	
 	private String userid;		// 아이디
 	private String password;	// 비번
@@ -18,13 +18,13 @@ public class LoginVO implements Serializable, SQL{
 //	================Member====================
 	
 	
-	public LoginVO() {
+	public MemberVO() {
 
 	}
 	
 	
 	
-	public LoginVO(String userid, String password, String name, String phone, String addr, 
+	public MemberVO(String userid, String password, String name, String phone, String addr, 
 				String birth, String question , String answer) {
 		this.userid = userid;
 		this.password = password;
